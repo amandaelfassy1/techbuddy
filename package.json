@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"node peerServer.js\" \"node server.js\" \"next dev\"",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma": "set -a && source .env.local && set +a && npx prisma ",
