@@ -89,12 +89,18 @@ const PeerPage = ({ chatId }: PeerPageProps) => {
   }, [chat]);
 
   useEffect(() => {
-    const newPeer = new Peer(myId, {
-      host: '/',
-      port: process.env.NODE_ENV === 'production' ? 443 : 9000,
-      path: '/peer',
-      secure: process.env.NODE_ENV === 'production'
-    });
+const peerHost =
+  process.env.NEXT_PUBLIC_PEER_HOST || 'localhost';
+
+const isLocalPeer =
+  peerHost === 'localhost' || peerHost === '127.0.0.1';
+
+const newPeer = new Peer(myId, {
+  host: peerHost,
+  port: isLocalPeer ? 9000 : 443,
+  path: '/peer',
+  secure: !isLocalPeer
+});
 
     setPeer(newPeer);
 
