@@ -106,7 +106,8 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3001, (err) => {
-  if (err) throw err;
-  console.log('> Ready on http://localhost:3001');
+const PORT = Number(process.env.PORT) || 3001;
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Socket.IO server listening on port ${PORT}`);
 });

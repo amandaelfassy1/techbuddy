@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { addToValidTokens, getValidTokens } from '../../middleware';
 import { NextRequestWithUser } from '../../type';
 import { sendMagicLinkMail } from '../../services/mailService';
+import { getJwtSecret } from '@/lib/wt-secret';
 
 export async function POST(req: NextRequestWithUser) {
   try {
@@ -23,7 +24,7 @@ export async function POST(req: NextRequestWithUser) {
     let token = await getValidTokens(user.id);
 
     if (!token) {
-      token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || 'secret', {
+      token = jwt.sign({ userId: user.id }, getJwtSecret(), {
         expiresIn: '10d'
       });
       await addToValidTokens(user.id, token);

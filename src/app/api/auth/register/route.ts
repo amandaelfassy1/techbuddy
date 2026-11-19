@@ -9,6 +9,7 @@ import { addToValidTokens, EXPIRATION_TIME_IN_DAYS } from '@/app/api/middleware'
 import { NextRequestWithUser } from '../../type';
 import { sendVerificationMail } from '../../services/mailService';
 import moment from 'moment';
+import { getJwtSecret } from '@/lib/wt-secret';
 
 export async function POST(req: NextRequestWithUser) {
   try {
@@ -63,7 +64,7 @@ export async function POST(req: NextRequestWithUser) {
     const verificationLink = `${process.env.APP_URL}/verify-email?token=${verificationToken}`;
     await sendVerificationMail(email, verificationLink);
 
-    const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET || 'secret', {
+    const token = jwt.sign({ userId: newUser.id }, getJwtSecret(), {
       expiresIn: `${EXPIRATION_TIME_IN_DAYS}d`
     });
 

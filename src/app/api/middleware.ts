@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 import { NextRequestWithUser } from './type';
 import Redis from 'ioredis';
+import { getJwtSecret } from '@/lib/wt-secret';
 
 const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 export const EXPIRATION_TIME_IN_DAYS = 30;
@@ -18,7 +19,7 @@ export async function verifyToken(req: NextRequestWithUser): Promise<boolean> {
     if (!token) {
       return false;
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as unknown as {
+    const decoded = jwt.verify(token, getJwtSecret()) as unknown as {
       userId: number;
     };
 
